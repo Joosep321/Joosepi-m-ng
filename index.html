@@ -31,6 +31,9 @@
             <button class="nav-btn" data-game="blackjack">🃏 Blackjack</button>
             <button class="nav-btn" data-game="poker">♠ Poker</button>
             <button class="nav-btn" data-game="roulette">🎯 Rulett</button>
+            <button class="nav-btn" data-game="dice">🎲 Täringud</button>
+            <button class="nav-btn" data-game="coin">🪙 Mündi vise</button>
+            <button class="nav-btn" data-game="highlower">🔼 Kõrgem/Madalam</button>
         </nav>
 
         <!-- Main Menu -->
@@ -62,6 +65,24 @@
                         <h3>Rulett</h3>
                         <p>Panusta numbrile ja ootad rattase pöörlemist</p>
                         <span class="difficulty">★☆☆☆☆</span>
+                    </div>
+                    <div class="game-card" data-game="dice">
+                        <div class="game-icon">🎲</div>
+                        <h3>Täringud</h3>
+                        <p>Viska täringud ja üle-alu numbrid võidavad!</p>
+                        <span class="difficulty">★★☆☆☆</span>
+                    </div>
+                    <div class="game-card" data-game="coin">
+                        <div class="game-icon">🪙</div>
+                        <h3>Mündi vise</h3>
+                        <p>Vali pead või kirjad ja arva õigesti</p>
+                        <span class="difficulty">★☆☆☆☆</span>
+                    </div>
+                    <div class="game-card" data-game="highlower">
+                        <div class="game-icon">🔼</div>
+                        <h3>Kõrgem/Madalam</h3>
+                        <p>Arva kas järgmine kaart on kõrgem või madalam</p>
+                        <span class="difficulty">★★☆☆☆</span>
                     </div>
                 </div>
             </div>
@@ -220,6 +241,118 @@
                     <button class="spin-btn" onclick="rouletteGame.spin()">🎪 KEERATA!</button>
                 </div>
                 <div id="roulette-message" class="message"></div>
+            </div>
+        </div>
+
+        <!-- Dice Game -->
+        <div id="dice" class="game-screen">
+            <h2>🎲 Täringud</h2>
+            <div class="game-content">
+                <div class="game-info">
+                    <p>Viska kaks täringut. 2-6 või 12-13 = võit! (Maksimaalne väljamakse: 10x)</p>
+                </div>
+                <div class="betting-section">
+                    <div>
+                        <label for="dice-bet">Panus (vale raha):</label>
+                        <input type="number" id="dice-bet" min="1" max="5000" value="10">
+                        <div class="quick-bets">
+                            <button onclick="document.getElementById('dice-bet').value=10">+10</button>
+                            <button onclick="document.getElementById('dice-bet').value=50">+50</button>
+                            <button onclick="document.getElementById('dice-bet').value=100">+100</button>
+                            <button onclick="document.getElementById('dice-bet').value=500">Max</button>
+                        </div>
+                    </div>
+                    <button class="spin-btn" onclick="diceGame.roll()">🎲 VISKA!</button>
+                </div>
+                <div class="dice-display">
+                    <div class="dice" id="dice1">1</div>
+                    <div class="dice" id="dice2">1</div>
+                </div>
+                <div id="dice-message" class="message"></div>
+                <div class="payouts">
+                    <h4>💰 Väljamaksed:</h4>
+                    <div class="payout-grid">
+                        <div class="payout-item">2<br><strong>10x</strong></div>
+                        <div class="payout-item">3<br><strong>5x</strong></div>
+                        <div class="payout-item">4<br><strong>3x</strong></div>
+                        <div class="payout-item">5<br><strong>2x</strong></div>
+                        <div class="payout-item">6<br><strong>2x</strong></div>
+                        <div class="payout-item">12<br><strong>10x</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coin Flip Game -->
+        <div id="coin" class="game-screen">
+            <h2>🪙 Mündi vise</h2>
+            <div class="game-content">
+                <div class="game-info">
+                    <p>Vali pead (H) või kirjad (T). 50/50 võimalus võita 2x!</p>
+                </div>
+                <div class="betting-section">
+                    <div>
+                        <label for="coin-bet">Panus (vale raha):</label>
+                        <input type="number" id="coin-bet" min="1" max="5000" value="10">
+                        <div class="quick-bets">
+                            <button onclick="document.getElementById('coin-bet').value=10">+10</button>
+                            <button onclick="document.getElementById('coin-bet').value=50">+50</button>
+                            <button onclick="document.getElementById('coin-bet').value=100">+100</button>
+                            <button onclick="document.getElementById('coin-bet').value=500">Max</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="coin-choice">
+                    <button class="choice-btn heads-btn" onclick="coinGame.flip('H')">👤 Pead</button>
+                    <button class="choice-btn tails-btn" onclick="coinGame.flip('T')">🔙 Kirjad</button>
+                </div>
+                <div class="coin-display">
+                    <div class="coin" id="coin-visual">🪙</div>
+                </div>
+                <div id="coin-message" class="message"></div>
+            </div>
+        </div>
+
+        <!-- Higher or Lower Game -->
+        <div id="highlower" class="game-screen">
+            <h2>🔼 Kõrgem/Madalam</h2>
+            <div class="game-content">
+                <div class="game-info">
+                    <p>Võrdle kaarte. Õige arvamine = 1.5x. Võidud kogunevad kuni väljumiseni!</p>
+                </div>
+                <div class="betting-section">
+                    <div>
+                        <label for="hl-bet">Algne panus (vale raha):</label>
+                        <input type="number" id="hl-bet" min="1" max="5000" value="10">
+                        <div class="quick-bets">
+                            <button onclick="document.getElementById('hl-bet').value=10">+10</button>
+                            <button onclick="document.getElementById('hl-bet').value=50">+50</button>
+                            <button onclick="document.getElementById('hl-bet').value=100">+100</button>
+                            <button onclick="document.getElementById('hl-bet').value=500">Max</button>
+                        </div>
+                    </div>
+                    <button class="start-btn" onclick="hlGame.startRound()">Alusta Mängu</button>
+                </div>
+                <div id="hl-game" style="display:none;">
+                    <div class="card-display">
+                        <div class="card-container">
+                            <p>Praegune kaart:</p>
+                            <div class="big-card" id="hl-current-card">K♥</div>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="card-container">
+                            <p>Järgmine kaart:</p>
+                            <div class="big-card" id="hl-next-card">?</div>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <button class="action-btn hit-btn" onclick="hlGame.guess('higher')" id="higher-btn">⬆️ Kõrgem</button>
+                        <button class="action-btn stand-btn" onclick="hlGame.guess('lower')" id="lower-btn">⬇️ Madalam</button>
+                        <button class="action-btn stand-btn" onclick="hlGame.endRound()" id="cash-btn">💰 Väljuda</button>
+                    </div>
+                    <div id="hl-message" class="message"></div>
+                    <p id="hl-winnings" class="winnings-display"></p>
+                </div>
             </div>
         </div>
     </div>

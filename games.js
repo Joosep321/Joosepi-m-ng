@@ -503,6 +503,243 @@ const rouletteGame = {
     }
 };
 
+// ============== DICE ==============
+const diceGame = {
+    rolling: false,
+
+    roll() {
+        const bet = parseInt(document.getElementById('dice-bet').value);
+        if (bet > balance || bet < 1) {
+            alert('Vigane panus!');
+            return;
+        }
+
+        if (this.rolling) return;
+
+        this.rolling = true;
+        balance -= bet;
+        updateBalance();
+
+        const dice1 = document.getElementById('dice1');
+        const dice2 = document.getElementById('dice2');
+        let rolls = 0;
+
+        const rollInterval = setInterval(() => {
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            dice1.textContent = d1;
+            dice2.textContent = d2;
+            dice1.classList.add('rolling');
+            dice2.classList.add('rolling');
+            rolls++;
+
+            if (rolls >= 15) {
+                clearInterval(rollInterval);
+                dice1.classList.remove('rolling');
+                dice2.classList.remove('rolling');
+                this.checkWin(d1, d2, bet);
+                this.rolling = false;
+            }
+        }, 50);
+    },
+
+    checkWin(d1, d2, bet) {
+        const sum = d1 + d2;
+        const payouts = { 2: 10, 3: 5, 4: 3, 5: 2, 6: 2, 12: 10 };
+        const multiplier = payouts[sum] || 0;
+        const payout = bet * multiplier;
+
+        const message = document.getElementById('dice-message');
+
+        if (multiplier > 0) {
+            balance += payout;
+            message.textContent = `🎉 Summa: ${sum}! Voitsid ${payout} vale raha!`;
+            message.className = 'message win';
+            wins++;
+        } else {
+            message.textContent = `Summa: ${sum}. Kahju!`;
+            message.className = 'message loss';
+        }
+
+        updateBalance();
+        setTimeout(() => {
+            document.getElementById('dice-message').textContent = '';
+        }, 3000);
+    }
+};
+
+// ============== COIN FLIP ==============
+const coinGame = {
+    flipping: false,
+
+    flip(choice) {
+        const bet = parseInt(document.getElementById('coin-bet').value);
+        if (bet > balance || bet < 1) {
+            alert('Vigane panus!');
+            return;
+        }
+
+        if (this.flipping) return;
+
+        this.flipping = true;
+        balance -= bet;
+        updateBalance();
+
+        const coin = document.getElementById('coin-visual');
+        const message = document.getElementById('coin-message');
+        
+        coin.classList.add('flipping');
+
+        setTimeout(() => {
+            const result = Math.random() < 0.5 ? 'H' : 'T';
+            const resultText = result === 'H' ? '👤 Pead' : '🔙 Kirjad';
+            coin.classList.remove('flipping');
+            coin.textContent = resultText;
+
+            if (choice === result) {
+                const payout = bet * 2;
+                balance += payout;
+                message.textContent = `🎉 Õige! Valisid ${resultText}. Voitsid ${payout} vale raha!`;
+                message.className = 'message win';
+                wins++;
+            } else {
+                const choiceText = choice === 'H' ? '👤 Pead' : '🔙 Kirjad';
+                message.textContent = `Välja kukkus ${resultText}. Sina panustasite ${choiceText}.`;
+                message.className = 'message loss';
+            }
+
+            updateBalance();
+            this.flipping = false;
+
+            setTimeout(() => {
+                document.getElementById('coin-message').textContent = '';
+                coin.textContent = '🪙';
+            }, 3000);
+        }, 1000);
+    }
+};
+
+// ============== HIGHER/LOWER ==============
+const hlGame = {
+    currentCard: null,
+    nextCard: null,
+    bet: 0,
+    currentWinnings: 0,
+    gameActive: false,
+    deck: [],
+
+    createDeck() {
+        const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+        const suits = ['♠', '♥', '♦', '♣'];
+        this.deck = [];
+        for (let value of values) {
+            for (let suit of suits) {
+                this.deck.push(value + suit);
+            }
+        }
+        this.shuffle();
+    },
+
+    shuffle() {
+        for (let i = this.deck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]];
+        }
+    },
+
+    getCard() {
+        if (this.deck.length < 10) this.createDeck();
+        return this.deck.pop();
+    },
+
+    getCardValue(card) {
+        const val = card.charAt(0);
+        if (val === 'A') return 1;
+        if (val === 'J') return 11;
+        if (val === 'Q') return 12;
+        if (val === 'K') return 13;
+        return parseInt(val);
+    },
+
+    startRound() {
+        const bet = parseInt(document.getElementById('hl-bet').value);
+        if (bet > balance || bet < 1) {
+            alert('Vigane panus!');
+            return;
+        }
+
+        this.bet = bet;
+        balance -= bet;
+        this.currentWinnings = bet;
+        this.gameActive = true;
+        this.createDeck();
+        this.currentCard = this.getCard();
+
+        document.querySelector('#highlower .betting-section').style.display = 'none';
+        document.getElementById('hl-game').style.display = 'block';
+        document.getElementById('hl-current-card').textContent = this.currentCard;
+        document.getElementById('hl-winnings').textContent = `Praegused võidud: ${this.currentWinnings}`;
+        updateBalance();
+    },
+
+    guess(direction) {
+        if (!this.gameActive) return;
+
+        this.nextCard = this.getCard();
+        const currentVal = this.getCardValue(this.currentCard);
+        const nextVal = this.getCardValue(this.nextCard);
+
+        document.getElementById('hl-next-card').textContent = this.nextCard;
+
+        let isCorrect = false;
+        if (direction === 'higher' && nextVal > currentVal) isCorrect = true;
+        if (direction === 'lower' && nextVal < currentVal) isCorrect = true;
+
+        const message = document.getElementById('hl-message');
+
+        if (isCorrect) {
+            this.currentWinnings = Math.floor(this.currentWinnings * 1.5);
+            message.textContent = `✅ Õige! ${this.nextCard} on ${direction === 'higher' ? 'kõrgem' : 'madalam'} kui ${this.currentCard}`;
+            message.className = 'message win';
+            document.getElementById('hl-winnings').textContent = `Praegused võidud: ${this.currentWinnings}`;
+            this.currentCard = this.nextCard;
+            setTimeout(() => {
+                document.getElementById('hl-next-card').textContent = '?';
+                message.textContent = '';
+            }, 2000);
+        } else {
+            this.endRound(false);
+        }
+    },
+
+    endRound(win = true) {
+        if (!this.gameActive) return;
+        this.gameActive = false;
+
+        const message = document.getElementById('hl-message');
+
+        if (win) {
+            balance += this.currentWinnings;
+            message.textContent = `🎉 Väljusite! Teenisid ${this.currentWinnings} vale raha!`;
+            message.className = 'message win';
+            wins++;
+        } else {
+            message.textContent = `❌ Vale! Kaotasid!`;
+            message.className = 'message loss';
+        }
+
+        updateBalance();
+
+        setTimeout(() => {
+            document.querySelector('#highlower .betting-section').style.display = 'flex';
+            document.getElementById('hl-game').style.display = 'none';
+            document.getElementById('hl-message').textContent = '';
+            document.getElementById('hl-winnings').textContent = '';
+            document.getElementById('hl-next-card').textContent = '?';
+        }, 3000);
+    }
+};
+
 // Initialize
 blackjackGame.createDeck();
 updateBalance();
