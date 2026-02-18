@@ -103,7 +103,7 @@
                             <button onclick="document.getElementById('slots-bet').value=10">+10</button>
                             <button onclick="document.getElementById('slots-bet').value=50">+50</button>
                             <button onclick="document.getElementById('slots-bet').value=100">+100</button>
-                            <button onclick="document.getElementById('slots-bet').value=Math.min(balance, 5000)">Max</button>
+                            <button onclick="setMaxBet('slots-bet', 5000)">Max</button>
                         </div>
                     </div>
                     <button class="spin-btn" onclick="slotsGame.spin()">🎰 KEERATA!</button>
@@ -145,7 +145,7 @@
                             <button onclick="document.getElementById('bj-bet').value=10">+10</button>
                             <button onclick="document.getElementById('bj-bet').value=50">+50</button>
                             <button onclick="document.getElementById('bj-bet').value=100">+100</button>
-                            <button onclick="document.getElementById('bj-bet').value=Math.min(balance, 5000)">Max</button>
+                            <button onclick="setMaxBet('bj-bet', 5000)">Max</button>
                         </div>
                     </div>
                     <button class="start-btn" onclick="blackjackGame.startRound()">Alusta Mängu</button>
@@ -187,7 +187,7 @@
                             <button onclick="document.getElementById('poker-bet').value=10">+10</button>
                             <button onclick="document.getElementById('poker-bet').value=50">+50</button>
                             <button onclick="document.getElementById('poker-bet').value=100">+100</button>
-                            <button onclick="document.getElementById('poker-bet').value=Math.min(balance, 5000)">Max</button>
+                            <button onclick="setMaxBet('poker-bet', 5000)">Max</button>
                         </div>
                     </div>
                     <button class="start-btn" onclick="pokerGame.startRound()">Alusta Mängu</button>
@@ -235,7 +235,7 @@
                             <button onclick="document.getElementById('roulette-bet').value=10">+10</button>
                             <button onclick="document.getElementById('roulette-bet').value=50">+50</button>
                             <button onclick="document.getElementById('roulette-bet').value=100">+100</button>
-                            <button onclick="document.getElementById('roulette-bet').value=Math.min(balance, 5000)">Max</button>
+                            <button onclick="setMaxBet('roulette-bet', 5000)">Max</button>
                         </div>
                     </div>
                     <button class="spin-btn" onclick="rouletteGame.spin()">🎪 KEERATA!</button>
@@ -259,7 +259,7 @@
                             <button onclick="document.getElementById('dice-bet').value=10">+10</button>
                             <button onclick="document.getElementById('dice-bet').value=50">+50</button>
                             <button onclick="document.getElementById('dice-bet').value=100">+100</button>
-                            <button onclick="document.getElementById('dice-bet').value=Math.min(balance, 5000)">Max</button>
+                            <button onclick="setMaxBet('dice-bet', 5000)">Max</button>
                         </div>
                     </div>
                     <button class="spin-btn" onclick="diceGame.roll()">🎲 VISKA!</button>
@@ -298,7 +298,7 @@
                             <button onclick="document.getElementById('coin-bet').value=10">+10</button>
                             <button onclick="document.getElementById('coin-bet').value=50">+50</button>
                             <button onclick="document.getElementById('coin-bet').value=100">+100</button>
-                            <button onclick="document.getElementById('coin-bet').value=Math.min(balance, 5000)">Max</button>
+                            <button onclick="setMaxBet('coin-bet', 5000)">Max</button>
                         </div>
                     </div>
                 </div>
@@ -328,7 +328,7 @@
                             <button onclick="document.getElementById('hl-bet').value=10">+10</button>
                             <button onclick="document.getElementById('hl-bet').value=50">+50</button>
                             <button onclick="document.getElementById('hl-bet').value=100">+100</button>
-                            <button onclick="document.getElementById('hl-bet').value=Math.min(balance, 5000)">Max</button>
+                            <button onclick="setMaxBet('hl-bet', 5000)">Max</button>
                         </div>
                     </div>
                     <button class="start-btn" onclick="hlGame.startRound()">Alusta Mängu</button>

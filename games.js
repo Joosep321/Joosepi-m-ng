@@ -12,6 +12,28 @@ function updateBalance() {
     }
 }
 
+// Money system helpers
+function setMaxBet(inputId, maxLimit = 5000) {
+    const input = document.getElementById(inputId);
+    input.value = Math.min(balance, maxLimit);
+}
+
+function validateBet(betAmount, maxBet = 5000) {
+    if (betAmount < 1) {
+        alert('Panus peab olema vähemalt 1!');
+        return false;
+    }
+    if (betAmount > balance) {
+        alert(`Sinu saldo on ${balance}. Ei saa panustada rohkem!`);
+        return false;
+    }
+    if (betAmount > maxBet) {
+        alert(`Maksimaalне panus on ${maxBet}!`);
+        return false;
+    }
+    return true;
+}
+
 // Navigation
 document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -41,10 +63,7 @@ const slotsGame = {
 
     spin() {
         const bet = parseInt(document.getElementById('slots-bet').value);
-        if (bet > balance || bet < 1) {
-            alert('Vigane panus!');
-            return;
-        }
+        if (!validateBet(bet, 5000)) return;
 
         if (this.spinning) return;
 
@@ -172,10 +191,7 @@ const blackjackGame = {
 
     startRound() {
         const betAmount = parseInt(document.getElementById('bj-bet').value);
-        if (betAmount > balance || betAmount < 1) {
-            alert('Vigane panus!');
-            return;
-        }
+        if (!validateBet(betAmount, 5000)) return;
         
         this.bet = betAmount;
         balance -= betAmount;
@@ -334,10 +350,7 @@ const pokerGame = {
 
     startRound() {
         const betAmount = parseInt(document.getElementById('poker-bet').value);
-        if (betAmount > balance || betAmount < 1) {
-            alert('Vigane panus!');
-            return;
-        }
+        if (!validateBet(betAmount, 5000)) return;
 
         this.bet = betAmount;
         balance -= betAmount;
@@ -456,10 +469,11 @@ const rouletteGame = {
         const number = parseInt(document.getElementById('roulette-number').value);
         const bet = parseInt(document.getElementById('roulette-bet').value);
 
-        if (number < 0 || number > 36 || bet > balance || bet < 1) {
-            alert('Vigane sisestus!');
+        if (number < 0 || number > 36) {
+            alert('Number peab olema 0-36 vahel!');
             return;
         }
+        if (!validateBet(bet, 5000)) return;
 
         if (this.spinning) return;
 
@@ -509,10 +523,7 @@ const diceGame = {
 
     roll() {
         const bet = parseInt(document.getElementById('dice-bet').value);
-        if (bet > balance || bet < 1) {
-            alert('Vigane panus!');
-            return;
-        }
+        if (!validateBet(bet, 5000)) return;
 
         if (this.rolling) return;
 
@@ -574,10 +585,7 @@ const coinGame = {
 
     flip(choice) {
         const bet = parseInt(document.getElementById('coin-bet').value);
-        if (bet > balance || bet < 1) {
-            alert('Vigane panus!');
-            return;
-        }
+        if (!validateBet(bet, 5000)) return;
 
         if (this.flipping) return;
 
@@ -663,10 +671,7 @@ const hlGame = {
 
     startRound() {
         const bet = parseInt(document.getElementById('hl-bet').value);
-        if (bet > balance || bet < 1) {
-            alert('Vigane panus!');
-            return;
-        }
+        if (!validateBet(bet, 5000)) return;
 
         this.bet = bet;
         balance -= bet;
