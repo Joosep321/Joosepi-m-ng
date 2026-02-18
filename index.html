@@ -218,15 +218,29 @@
             <h2>🎯 Rulett</h2>
             <div class="game-content">
                 <div class="game-info">
-                    <p>Panusta numbrile (0-36). Kui arvasid õigesti, võidad 36x!</p>
+                    <p>Panusta numbrile (0-36) või värvile (must/punane). Numbril 36x, värvil 2x väljamakse!</p>
                 </div>
                 <div class="roulette-wheel">
                     <div class="wheel" id="wheel"></div>
                 </div>
                 <div class="betting-section">
                     <div>
+                        <label>Panus tüüp:</label>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <button class="bet-type-btn active" data-type="number" onclick="rouletteGame.setBetType('number')">🔢 Number</button>
+                            <button class="bet-type-btn" data-type="color" onclick="rouletteGame.setBetType('color')">🎨 Värv</button>
+                        </div>
+                    </div>
+                    <div id="number-betting" style="display: block;">
                         <label for="roulette-number">Valitud number (0-36):</label>
                         <input type="number" id="roulette-number" min="0" max="36" value="17">
+                    </div>
+                    <div id="color-betting" style="display: none;">
+                        <label>Vali värv:</label>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <button class="color-btn red-btn" data-color="red" onclick="rouletteGame.setColor('red')">🔴 Punane</button>
+                            <button class="color-btn black-btn" data-color="black" onclick="rouletteGame.setColor('black')">⚫ Must</button>
+                        </div>
                     </div>
                     <div>
                         <label for="roulette-bet">Panus (vale raha):</label>

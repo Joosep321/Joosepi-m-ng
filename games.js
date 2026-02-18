@@ -464,17 +464,53 @@ const pokerGame = {
 const rouletteGame = {
     spinning: false,
     wheelRotation: 0,
+    betType: 'number',
+    selectedColor: null,
+    redNumbers: [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36],
+    blackNumbers: [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35],
+
+    setBetType(type) {
+        this.betType = type;
+        document.querySelectorAll('.bet-type-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`[data-type="${type}"]`).classList.add('active');
+        
+        if (type === 'number') {
+            document.getElementById('number-betting').style.display = 'block';
+            document.getElementById('color-betting').style.display = 'none';
+        } else {
+            document.getElementById('number-betting').style.display = 'none';
+            document.getElementById('color-betting').style.display = 'block';
+        }
+    },
+
+    setColor(color) {
+        this.selectedColor = color;
+        document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`[data-color="${color}"]`).classList.add('active');
+    },
 
     spin() {
-        const number = parseInt(document.getElementById('roulette-number').value);
         const bet = parseInt(document.getElementById('roulette-bet').value);
 
-        if (number < 0 || number > 36) {
-            alert('Number peab olema 0-36 vahel!');
-            return;
-        }
         if (!validateBet(bet, 5000)) return;
 
+        if (this.betType === 'number') {
+            const number = parseInt(document.getElementById('roulette-number').value);
+            if (number < 0 || number > 36) {
+                alert('Number peab olema 0-36 vahel!');
+                return;
+            }
+            this.performSpin(number, null, bet);
+        } else {
+            if (!this.selectedColor) {
+                alert('Vali värv - punane või must!');
+                return;
+            }
+            this.performSpin(null, this.selectedColor, bet);
+        }
+    },
+
+    performSpin(playerNumber, playerColor, bet) {
         if (this.spinning) return;
 
         this.spinning = true;
@@ -491,11 +527,15 @@ const rouletteGame = {
 
         setTimeout(() => {
             this.spinning = false;
-            this.checkWinner(number, winningNumber, bet);
+            if (playerNumber !== null) {
+                this.checkNumberWinner(playerNumber, winningNumber, bet);
+            } else {
+                this.checkColorWinner(playerColor, winningNumber, bet);
+            }
         }, 3000);
     },
 
-    checkWinner(playerNumber, winningNumber, bet) {
+    checkNumberWinner(playerNumber, winningNumber, bet) {
         const message = document.getElementById('roulette-message');
 
         if (playerNumber === winningNumber) {
@@ -506,6 +546,42 @@ const rouletteGame = {
             wins++;
         } else {
             message.textContent = `Välja kukkus ${winningNumber}. Kahju, sa panustaad ${playerNumber}le.`;
+            message.className = 'message loss';
+        }
+
+        updateBalance();
+
+        setTimeout(() => {
+            document.getElementById('roulette-message').textContent = '';
+        }, 3000);
+    },
+
+    checkColorWinner(playerColor, winningNumber, bet) {
+        const message = document.getElementById('roulette-message');
+        let winningColor = null;
+        let winningColorName = '';
+
+        if (winningNumber === 0) {
+            winningColor = 'green';
+            winningColorName = 'Roheline';
+        } else if (this.redNumbers.includes(winningNumber)) {
+            winningColor = 'red';
+            winningColorName = 'Punane';
+        } else {
+            winningColor = 'black';
+            winningColorName = 'Must';
+        }
+
+        if (playerColor === winningColor && winningColor !== 'green') {
+            const payout = bet * 2;
+            balance += payout;
+            const colorEmoji = playerColor === 'red' ? '🔴' : '⚫';
+            message.textContent = `🎉 Arvasin õigesti! ${colorEmoji} ${winningColorName}! Voitsid ${payout} vale raha!`;
+            message.className = 'message win';
+            wins++;
+        } else {
+            const colorEmoji = winningColor === 'red' ? '🔴' : winningColor === 'black' ? '⚫' : '🟢';
+            message.textContent = `Välja kukkus ${colorEmoji} ${winningColorName} (${winningNumber}). Kahju!`;
             message.className = 'message loss';
         }
 
