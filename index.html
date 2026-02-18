@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mängude Kogu - Vale Raha</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1 class="title">🎰 MÄNGUDE KOGU 🎰</h1>
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <span class="stat-label">Vale Raha:</span>
+                        <span class="stat-value" id="balance">10000</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Võite:</span>
+                        <span class="stat-value" id="wins">0</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav class="game-nav">
+            <button class="nav-btn active" data-game="menu">🏠 Menüü</button>
+            <button class="nav-btn" data-game="slots">🎡 Slotts</button>
+            <button class="nav-btn" data-game="blackjack">🃏 Blackjack</button>
+            <button class="nav-btn" data-game="poker">♠ Poker</button>
+            <button class="nav-btn" data-game="roulette">🎯 Rulett</button>
+        </nav>
+
+        <!-- Main Menu -->
+        <div id="menu" class="game-screen active">
+            <div class="menu-content">
+                <h2>Tere tulemast kasinosse! 🎉</h2>
+                <p class="intro-text">Vali mäng ja provi õnne. Alustame 10,000 vale rahaga!</p>
+                <div class="game-grid">
+                    <div class="game-card" data-game="slots">
+                        <div class="game-icon">🎡</div>
+                        <h3>Slotts</h3>
+                        <p>Keerata kolm rulli ja võita jäckpoti! Maksimaalne väljamakse: 5000x</p>
+                        <span class="difficulty">★★☆☆☆</span>
+                    </div>
+                    <div class="game-card" data-game="blackjack">
+                        <div class="game-icon">🃏</div>
+                        <h3>Blackjack</h3>
+                        <p>Saada oma käsi lähemale 21-le kui dealeril</p>
+                        <span class="difficulty">★★★☆☆</span>
+                    </div>
+                    <div class="game-card" data-game="poker">
+                        <div class="game-icon">♠</div>
+                        <h3>Video Poker</h3>
+                        <p>Hangi parim pokeri käsi ja võida suuremalt</p>
+                        <span class="difficulty">★★★★☆</span>
+                    </div>
+                    <div class="game-card" data-game="roulette">
+                        <div class="game-icon">🎯</div>
+                        <h3>Rulett</h3>
+                        <p>Panusta numbrile ja ootad rattase pöörlemist</p>
+                        <span class="difficulty">★☆☆☆☆</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slots Game -->
+        <div id="slots" class="game-screen">
+            <h2>🎡 Slotts Masin</h2>
+            <div class="game-content">
+                <div class="game-info">
+                    <p>Panusta ja keerata rulle. Kolm identset sümbolit = võit!</p>
+                </div>
+                <div class="betting-section">
+                    <div>
+                        <label for="slots-bet">Panus (vale raha):</label>
+                        <input type="number" id="slots-bet" min="1" max="5000" value="10">
+                        <div class="quick-bets">
+                            <button onclick="document.getElementById('slots-bet').value=10">+10</button>
+                            <button onclick="document.getElementById('slots-bet').value=50">+50</button>
+                            <button onclick="document.getElementById('slots-bet').value=100">+100</button>
+                            <button onclick="document.getElementById('slots-bet').value=500">Max</button>
+                        </div>
+                    </div>
+                    <button class="spin-btn" onclick="slotsGame.spin()">🎰 KEERATA!</button>
+                </div>
+                <div class="slots-machine">
+                    <div class="reels">
+                        <div class="reel" id="reel1">🍎</div>
+                        <div class="reel" id="reel2">🍎</div>
+                        <div class="reel" id="reel3">🍎</div>
+                    </div>
+                </div>
+                <div id="slots-message" class="message"></div>
+                <div class="payouts">
+                    <h4>💰 Väljamaksed:</h4>
+                    <div class="payout-grid">
+                        <div class="payout-item">🍎 🍎 🍎<br><strong>50x</strong></div>
+                        <div class="payout-item">🍇 🍇 🍇<br><strong>30x</strong></div>
+                        <div class="payout-item">🍋 🍋 🍋<br><strong>20x</strong></div>
+                        <div class="payout-item">🍊 🍊 🍊<br><strong>15x</strong></div>
+                        <div class="payout-item">⭐ ⭐ ⭐<br><strong>75x</strong></div>
+                        <div class="payout-item">🔔 🔔 🔔<br><strong>100x</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blackjack Game -->
+        <div id="blackjack" class="game-screen">
+            <h2>🃏 Blackjack</h2>
+            <div class="game-content">
+                <div class="game-info">
+                    <p>Saada oma käsi lähemale 21-le kui dealer, aga ära ületa!</p>
+                </div>
+                <div class="betting-section">
+                    <div>
+                        <label for="bj-bet">Panus (vale raha):</label>
+                        <input type="number" id="bj-bet" min="1" max="5000" value="10">
+                        <div class="quick-bets">
+                            <button onclick="document.getElementById('bj-bet').value=10">+10</button>
+                            <button onclick="document.getElementById('bj-bet').value=50">+50</button>
+                            <button onclick="document.getElementById('bj-bet').value=100">+100</button>
+                            <button onclick="document.getElementById('bj-bet').value=500">Max</button>
+                        </div>
+                    </div>
+                    <button class="start-btn" onclick="blackjackGame.startRound()">Alusta Mängu</button>
+                </div>
+                <div id="bj-game" style="display:none;">
+                    <div class="hand-display">
+                        <div class="hand dealer-hand">
+                            <h3>🎩 Dealer</h3>
+                            <div id="dealer-cards" class="cards"></div>
+                            <p id="dealer-total" class="hand-total"></p>
+                        </div>
+                        <div class="hand player-hand">
+                            <h3>👤 Sind</h3>
+                            <div id="player-cards" class="cards"></div>
+                            <p id="player-total" class="hand-total"></p>
+                        </div>
+                    </div>
+                    <div id="bj-message" class="message"></div>
+                    <div class="buttons">
+                        <button class="action-btn hit-btn" onclick="blackjackGame.hit()" id="hit-btn">✋ Hit</button>
+                        <button class="action-btn stand-btn" onclick="blackjackGame.stand()" id="stand-btn">🛑 Stand</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Poker Game -->
+        <div id="poker" class="game-screen">
+            <h2>♠ Video Poker</h2>
+            <div class="game-content">
+                <div class="game-info">
+                    <p>Hangi parim pokeri käsi. Kliki kaardile, et see kinni pidada, siis vaheta ülejäänud.</p>
+                </div>
+                <div class="betting-section">
+                    <div>
+                        <label for="poker-bet">Panus (vale raha):</label>
+                        <input type="number" id="poker-bet" min="1" max="5000" value="10">
+                        <div class="quick-bets">
+                            <button onclick="document.getElementById('poker-bet').value=10">+10</button>
+                            <button onclick="document.getElementById('poker-bet').value=50">+50</button>
+                            <button onclick="document.getElementById('poker-bet').value=100">+100</button>
+                            <button onclick="document.getElementById('poker-bet').value=500">Max</button>
+                        </div>
+                    </div>
+                    <button class="start-btn" onclick="pokerGame.startRound()">Alusta Mängu</button>
+                </div>
+                <div id="poker-game" style="display:none;">
+                    <div class="poker-hand-display">
+                        <div id="poker-hand" class="cards"></div>
+                    </div>
+                    <div id="poker-buttons" class="buttons"></div>
+                    <div id="poker-message" class="message"></div>
+                    <div class="payouts poker-payouts">
+                        <h4>💰 Väljamaksed:</h4>
+                        <div class="payout-grid">
+                            <div>Royal Flush: <strong>250x</strong></div>
+                            <div>Straight Flush: <strong>50x</strong></div>
+                            <div>Four of a Kind: <strong>25x</strong></div>
+                            <div>Full House: <strong>9x</strong></div>
+                            <div>Flush: <strong>6x</strong></div>
+                            <div>Straight: <strong>4x</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Roulette Game -->
+        <div id="roulette" class="game-screen">
+            <h2>🎯 Rulett</h2>
+            <div class="game-content">
+                <div class="game-info">
+                    <p>Panusta numbrile (0-36). Kui arvasid õigesti, võidad 36x!</p>
+                </div>
+                <div class="roulette-wheel">
+                    <div class="wheel" id="wheel"></div>
+                </div>
+                <div class="betting-section">
+                    <div>
+                        <label for="roulette-number">Valitud number (0-36):</label>
+                        <input type="number" id="roulette-number" min="0" max="36" value="17">
+                    </div>
+                    <div>
+                        <label for="roulette-bet">Panus (vale raha):</label>
+                        <input type="number" id="roulette-bet" min="1" max="5000" value="10">
+                        <div class="quick-bets">
+                            <button onclick="document.getElementById('roulette-bet').value=10">+10</button>
+                            <button onclick="document.getElementById('roulette-bet').value=50">+50</button>
+                            <button onclick="document.getElementById('roulette-bet').value=100">+100</button>
+                            <button onclick="document.getElementById('roulette-bet').value=500">Max</button>
+                        </div>
+                    </div>
+                    <button class="spin-btn" onclick="rouletteGame.spin()">🎪 KEERATA!</button>
+                </div>
+                <div id="roulette-message" class="message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="games.js"></script>
+</body>
+</html>
